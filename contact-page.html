@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacts</title>
+    <style>
+        :root {
+            /* Light theme variables */
+            --bg-color: #ffffff;
+            --text-color: #23272A;
+            --secondary-bg: #f6f6f6;
+            --accent-color: #5865F2;
+            --border-color: #e0e0e0;
+            --card-bg: #ffffff;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Dark theme variables */
+                --bg-color: #23272A;
+                --text-color: #ffffff;
+                --secondary-bg: #2C2F33;
+                --accent-color: #5865F2;
+                --border-color: #444;
+                --card-bg: #2C2F33;
+                --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .navbar {
+            background-color: var(--secondary-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .nav-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .nav-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            padding-top: 5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        .contact-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--border-color);
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .contact-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 3px solid var(--accent-color);
+        }
+        
+        .contact-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        
+        .contact-info {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        
+        .contact-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .nav-btn {
+                padding: 0.4rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .contacts-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1.5rem;
+            }
+            
+            .contact-photo {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">Group-IV 4ever</a>
+        <div class="nav-buttons">
+            <a href="/index.html"><button class="nav-btn">Home</button></a>
+            <a href="/events-page.html"><button class="nav-btn">Events</button></a>
+        </div>
+    </nav>
+    
+    <main class="main-content">
+
+        <div class="contacts-grid">
+            <div class="contact-card">
+                <h3 class="contact-name">Tafsirul Mahbub Sowad</h3>
+                <p class="contact-info">Roll: 12404081</p>
+                <p class="contact-info">Institute: BUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="mailto:" class="contact-link">Email</a>
+                </div>
+            </div>
+            
+            <div class="contact-card">
+                
+                <h3 class="contact-name">Abrar Fahim</h3>
+                <p class="contact-info">Roll: 12404039</p>
+                <p class="contact-info">Institute: BUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            
+            <div class="contact-card">
+                <h3 class="contact-name">Ahammad Nabil</h3>
+                <p class="contact-info">Roll: 12404075</p>
+                <p class="contact-info">Institute: BUTEX</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            
+            <div class="contact-card">
+                <h3 class="contact-name">Mahibur Rahman Fahim</h3>
+                <p class="contact-info">Roll: 12404043</p>
+                <p class="contact-info">Institute: BUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            
+            <div class="contact-card">
+                <h3 class="contact-name">MD Nafiz Ahmed</h3>
+                <p class="contact-info">Roll: 12404121</p>
+                <p class="contact-info">Institute: RUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            
+            <div class="contact-card">
+                <h3 class="contact-name">Muqset Hossain Mahin</h3>
+                <p class="contact-info">Roll: 12404110</p>
+                <p class="contact-info">Institute: CUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Fairuzur Pretom</h3>
+                <p class="contact-info">Roll: 12404066</p>
+                <p class="contact-info">Institute: RUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Maniruzzaman Mridul</h3>
+                <p class="contact-info">Roll: 12404078</p>
+                <p class="contact-info">Institute: BUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Radwan Islam</h3>
+                <p class="contact-info">Roll: 12404069</p>
+                <p class="contact-info">Institute: BUTEX</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Ruhul Amin Sifat</h3>
+                <p class="contact-info">Roll: 12404008</p>
+                <p class="contact-info">Institute: BUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Al Saffat Adib</h3>
+                <p class="contact-info">Roll: 12404012</p>
+                <p class="contact-info">Institute: BUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Muktadirul Islam</h3>
+                <p class="contact-info">Roll: 12404046</p>
+                <p class="contact-info">Institute: ISRT, DU</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Ashraful Ornab</h3>
+                <p class="contact-info">Roll: 12404076</p>
+                <p class="contact-info">Institute: Mugda Medical College</p>
+                <p class="contact-info">Subject: MBBS</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Siddhartho Saha</h3>
+                <p class="contact-info">Roll: 12404074</p>
+                <p class="contact-info">Institute: BUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Moontasir Anan</h3>
+                <p class="contact-info">Roll: 12404022</p>
+                <p class="contact-info">Institute: BUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Fahomid Lafim Pritom</h3>
+                <p class="contact-info">Roll: 12404068</p>
+                <p class="contact-info">Institute: BUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Juboraj Malakar</h3>
+                <p class="contact-info">Roll: 12404091</p>
+                <p class="contact-info">Institute: SUST</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Fahim Hassan</h3>
+                <p class="contact-info">Roll: 12404079</p>
+                <p class="contact-info">Institute: BRAC University</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Ashraf Hossain</h3>
+                <p class="contact-info">Roll: 12404029</p>
+                <p class="contact-info">Institute: BUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Ismail Hossain Mafid</h3>
+                <p class="contact-info">Roll: 12404028</p>
+                <p class="contact-info">Institute: Faridpur Medical College</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Al Katib Laskar</h3>
+                <p class="contact-info">Roll: 12404058</p>
+                <p class="contact-info">Institute: KUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Nahian Monir</h3>
+                <p class="contact-info">Roll: 12404071</p>
+                <p class="contact-info">Institute: Faridpur Medical College</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Mahim Muntasir</h3>
+                <p class="contact-info">Roll: 12404122</p>
+                <p class="contact-info">Institute: Dinajpur Medical College</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Salman Uddin Pathan</h3>
+                <p class="contact-info">Roll: 12404097</p>
+                <p class="contact-info">Institute:BUTEX</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Abdul Haq Musiar</h3>
+                <p class="contact-info">Roll: 12404103</p>
+                <p class="contact-info">Institute: SUST</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Lokonath Basak Bijoy</h3>
+                <p class="contact-info">Roll: 12404020</p>
+                <p class="contact-info">Institute: BUET</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Rayan Nil Dhrubo</h3>
+                <p class="contact-info">Roll: 12404002</p>
+                <p class="contact-info">Institute: Bangladesh Medical College</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Nafis Fuad</h3>
+                <p class="contact-info">Roll: 12404061</p>
+                <p class="contact-info">Institute: MIST</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Kazi Ahmed Umair</h3>
+                <p class="contact-info">Roll: 12404041</p>
+                <p class="contact-info">Institute: Suhrawardy Medical College</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Rydwan Islam</h3>
+                <p class="contact-info">Roll: 12404027</p>
+                <p class="contact-info">Institute: Chittagong Medical College</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 class="contact-name">Prianto Paul</h3>
+                <p class="contact-info">Roll: 12404007</p>
+                <p class="contact-info">Institute: DU</p>
+                <p class="contact-info">Subject:</p>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">Facebook</a>
+                    <a href="#" class="contact-link">Email</a>
+                </div>
+            </div>
+
+            
+            
+        </div>
+    </main>
+</body>
+</html>

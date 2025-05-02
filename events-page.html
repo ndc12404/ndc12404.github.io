@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+    <style>
+        :root {
+            /* Light theme variables */
+            --bg-color: #ffffff;
+            --text-color: #23272A;
+            --secondary-bg: #f6f6f6;
+            --accent-color: #5865F2;
+            --border-color: #e0e0e0;
+            --card-bg: #ffffff;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --section-bg: #f9f9f9;
+            --past-event-opacity: 0.8;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Dark theme variables */
+                --bg-color: #23272A;
+                --text-color: #ffffff;
+                --secondary-bg: #2C2F33;
+                --accent-color: #5865F2;
+                --border-color: #444;
+                --card-bg: #2C2F33;
+                --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                --section-bg: #1e2124;
+                --past-event-opacity: 0.7;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .navbar {
+            background-color: var(--secondary-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .nav-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .nav-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            padding-top: 5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .events-section {
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+        
+        .events-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .event-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            padding: 1.5rem;
+            transition: transform 0.3s;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .upcoming-event {
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .past-event {
+            opacity: var(--past-event-opacity);
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .event-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: var(--accent-color);
+        }
+        
+        .event-date {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 0.8rem;
+        }
+        
+        .event-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+            text-align: justify;
+        }
+        
+        .event-location {
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .event-link {
+            align-self: flex-end;
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+            text-align: center;
+        }
+        
+        .event-link:hover {
+            opacity: 0.9;
+        }
+        
+        .past-event .event-link {
+            background-color: #717171;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .nav-btn {
+                padding: 0.4rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+            
+            .event-title {
+                font-size: 1.2rem;
+            }
+            
+            .main-content {
+                padding: 5rem 1rem 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/index.html" class="logo">Group-IV 4ever</a>
+        <div class="nav-buttons">
+            <a href="/index.html"><button class="nav-btn">Home</button></a>
+            <a href="/contact-page.html"><button class="nav-btn">Contacts</button></a>
+        </div>
+    </nav>
+    
+    <main class="main-content">
+
+        
+        <!-- Upcoming Events Section -->
+        <section class="events-section">
+            <h2 class="section-title">Upcoming Events</h2>
+            <div class="events-container">
+                <div class="event-card upcoming-event">
+                    <h3 class="event-title">Event-01</h3>
+                    <p class="event-date">Date:  • 6:00 PM - 10:00 PM</p>
+                    <p class="event-description">
+                        Event description
+                    </p>
+                    <p class="event-location">📍 Virtual Event (Zoom)</p>
+                    <a href="#" class="event-link">Register Now</a>
+                </div>
+                
+                <div class="event-card upcoming-event">
+                    <h3 class="event-title">Event-02</h3>
+                    <p class="event-date">Date:  • 10:00 AM - 2:00 PM</p>
+                    <p class="event-description">
+                        Event description
+                    </p>
+                    <p class="event-location">📍 Virtual Event (Zoom)</p>
+                    <a href="#" class="event-link">Register Now</a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Previous Events Section -->
+        <section class="events-section">
+            <h2 class="section-title">Previous Events</h2>
+            <div class="events-container">
+                <div class="event-card past-event">
+                    <h3 class="event-title">Past event -01</h3>
+                    <p class="event-date">Date:  • 3:00 PM - 7:00 PM</p>
+                    <p class="event-description">
+                        Event description
+                    </p>
+                    <p class="event-location">📍</p>
+                    <a href="#" class="event-link">View Photos</a>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
