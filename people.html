@@ -1,661 +1,1105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacts</title>
-    <style>
-        :root {
-            /* Light theme variables */
-            --bg-color: #ffffff;
-            --text-color: #23272A;
-            --secondary-bg: #f6f6f6;
-            --accent-color: #5865F2;
-            --border-color: #e0e0e0;
-            --card-bg: #ffffff;
-            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        @media (prefers-color-scheme: dark) {
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Contacts</title>
+        <style>
             :root {
-                /* Dark theme variables */
-                --bg-color: #23272A;
-                --text-color: #ffffff;
-                --secondary-bg: #2C2F33;
-                --accent-color: #5865F2;
-                --border-color: #444;
-                --card-bg: #2C2F33;
-                --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                /* Light theme variables */
+                --bg-color: #ffffff;
+                --text-color: #23272a;
+                --secondary-bg: #f6f6f6;
+                --accent-color: #5865f2;
+                --border-color: #e0e0e0;
+                --card-bg: #ffffff;
+                --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-        
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        
-        .navbar {
-            background-color: var(--secondary-bg);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            width: 100%;
-            z-index: 100;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--text-color);
-            text-decoration: none;
-        }
-        
-        .nav-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .nav-btn {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        
-        .nav-btn:hover {
-            opacity: 0.9;
-        }
-        
-        .main-content {
-            padding-top: 5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem;
-        }
-        
-        .page-title {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            width: 100%;
-        }
-        
-        .contacts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-            width: 100%;
-            max-width: 1200px;
-        }
-        
-        .contact-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: var(--card-shadow);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1.5rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--border-color);
-        }
-        
-        .contact-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .contact-photo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 1rem;
-            border: 3px solid var(--accent-color);
-        }
-        
-        .contact-name {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-        
-        .contact-info {
-            font-size: 0.9rem;
-            color: var(--text-color);
-            opacity: 0.8;
-            text-align: center;
-            margin-bottom: 0.5rem;
-        }
-        
-        .contact-links {
-            display: flex;
-            gap: 0.8rem;
-            margin-top: 0.5rem;
-        }
-        
-        .contact-link {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        
-        .contact-link:hover {
-            text-decoration: underline;
-        }
-        
-        /* Responsive design */
-        @media (max-width: 768px) {
+
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    /* Dark theme variables */
+                    --bg-color: #23272a;
+                    --text-color: #ffffff;
+                    --secondary-bg: #2c2f33;
+                    --accent-color: #5865f2;
+                    --border-color: #444;
+                    --card-bg: #2c2f33;
+                    --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                }
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+                    sans-serif;
+            }
+
+            body {
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                transition:
+                    background-color 0.3s,
+                    color 0.3s;
+            }
+
             .navbar {
-                padding: 0.8rem 1rem;
+                background-color: var(--secondary-bg);
+                padding: 1rem 2rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                position: fixed;
+                width: 100%;
+                z-index: 100;
             }
-            
+
             .logo {
-                font-size: 1.3rem;
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: var(--text-color);
+                text-decoration: none;
             }
-            
+
+            .nav-buttons {
+                display: flex;
+                gap: 1rem;
+            }
+
             .nav-btn {
-                padding: 0.4rem 1rem;
+                background-color: var(--accent-color);
+                color: white;
+                border: none;
+                padding: 0.5rem 1.5rem;
+                border-radius: 20px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background-color 0.2s;
+            }
+
+            .nav-btn:hover {
+                opacity: 0.9;
+            }
+
+            .main-content {
+                padding-top: 5rem;
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+                text-align: center;
+                width: 100%;
+            }
+
+            .contacts-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 2rem;
+                width: 100%;
+                max-width: 1200px;
+            }
+
+            .contact-card {
+                background-color: var(--card-bg);
+                border-radius: 12px;
+                box-shadow: var(--card-shadow);
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 1.5rem;
+                transition:
+                    transform 0.3s,
+                    box-shadow 0.3s;
+                backdrop-filter: blur(5px);
+                border: 1px solid var(--border-color);
+            }
+
+            .contact-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+
+            .contact-photo {
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-bottom: 1rem;
+                border: 3px solid var(--accent-color);
+            }
+
+            .contact-name {
+                font-size: 1.2rem;
+                font-weight: bold;
+                margin-bottom: 0.5rem;
+                text-align: center;
+            }
+
+            .contact-info {
+                font-size: 0.9rem;
+                color: var(--text-color);
+                opacity: 0.8;
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+
+            .contact-links {
+                display: flex;
+                gap: 0.8rem;
+                margin-top: 0.5rem;
+            }
+
+            .contact-link {
+                color: var(--accent-color);
+                text-decoration: none;
                 font-size: 0.9rem;
             }
-            
-            .contacts-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 1.5rem;
-            }
-            
-            .contact-photo {
-                width: 100px;
-                height: 100px;
-            }
-            
-            .page-title {
-                font-size: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <a href="/index.html" class="logo">Group-IV 4ever</a>
-        <div class="nav-buttons">
-            <a href="/index.html"><button class="nav-btn"><b>Home</b></button></a>
-            <a href="/events.html"><button class="nav-btn"><b>Events</b></button></a>
-        </div>
-    </nav>
-    
-    <main class="main-content">
-        <div class="contacts-grid">
-                <div class="contact-card">
-                <h3 class="contact-name">Khondoker Muktadirul Islam</h3>
-                <p class="contact-info">Roll: 12404046</p>
-                <p class="contact-info">Institute: ISRT, DU</p>
-                <p class="contact-info">Subject: Applied Statistics & Data Science</p>
-                <p class="contact-info">I maintain this website. For any website related queries or information mismatch, please contact me.</p>
-                <div class="contact-links">
-                    <a href="#" class="contact-link">Facebook</a>
-                    <a href="mailto:somiomuktadir@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Nahian Monir</h3>
-                <p class="contact-info">Roll: 12404071</p>
-                <p class="contact-info">Institute: Faridpur Medical College</p>
-                <p class="contact-info">Subject: MBBS</p>
-                <p class="contact-info">I collect information about our alumni. For any information related queries, please contact me.</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/monirnahian10" class="contact-link">Facebook</a>
-                    <a href="mailto:nahianmahi849@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md. Tafsirul Mahbub Sowad</h3>
-                <p class="contact-info">Roll: 12404081</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: Civil Engineering</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/1ABmhzStKj/?mibextid=wwXIfr" class="contact-link">Facebook</a>
-                    <a href="mailto:tafsirulsowad695@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Abrar Fahim</h3>
-                <p class="contact-info">Roll: 12404039</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: Industrial & Production Engineering</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/1Y9NbU41fu/" class="contact-link">Facebook</a>
-                    <a href="mailto:abrarfahim1971@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Ahammad Nabil</h3>
-                <p class="contact-info">Roll: 12404075</p>
-                <p class="contact-info">Institute: BUTEX</p>
-                <p class="contact-info">Subject: Yarn Engineering</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/15uXjVmQZL/" class="contact-link">Facebook</a>
-                    <a href="mailto:ahmedquraisilusael@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Mahibur Rahman Fahim</h3>
-                <p class="contact-info">Roll: 12404043</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: CSE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/16LpKZiM1e/" class="contact-link">Facebook</a>
-                    <a href="mailto:mahibur28@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">MD Nafiz Ahmed</h3>
-                <p class="contact-info">Roll: 12404121</p>
-                <p class="contact-info">Institute: RUET</p>
-                <p class="contact-info">Subject: Mechanical Engineering</p>
-                <div class="contact-links">
-                    <a href="https://web.facebook.com/proﬁle.php?id=100090353485932" class="contact-link">Facebook</a>
-                    <a href="mailto:ahmednafiz964@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Muqset Hossain Mahin</h3>
-                <p class="contact-info">Roll: 12404110</p>
-                <p class="contact-info">Institute: CUET</p>
-                <p class="contact-info">Subject: CSE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/192bFh62aJ/" class="contact-link">Facebook</a>
-                    <a href="mailto:muqset1202@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Fairuzur Pretom</h3>
-                <p class="contact-info">Roll: 12404066</p>
-                <p class="contact-info">Institute: RUET</p>
-                <p class="contact-info">Subject: Architecture</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/goandﬁndme.come" class="contact-link">Facebook</a>
-                    <a href="mailto:fairuzurrahmanpretom@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md. Maniruzzaman Mridul</h3>
-                <p class="contact-info">Roll: 12404078</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: CSE</p>
-                <div class="contact-links">
-                    <a href="#" class="contact-link">Facebook</a>
-                    <a href="mailto:mdmaniruzzamanmridul@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md. Radwan Islam</h3>
-                <p class="contact-info">Roll: 12404069</p>
-                <p class="contact-info">Institute: BUTEX</p>
-                <p class="contact-info">Subject: Yarn Engineering</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/md.rad1.islam?mibextid=ZbWKwL" class="contact-link">Facebook</a>
-                    <a href="mailto:mohammad.rad1.islam@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md. Ruhul Amin Sifat</h3>
-                <p class="contact-info">Roll: 12404008</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: Materials & Metallurgical Engineering</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/proﬁle.php?id=100089085095296" class="contact-link">Facebook</a>
-                    <a href="mailto:paulsifat10032005@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Al Saffat Adib</h3>
-                <p class="contact-info">Roll: 12404012</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: Industrial & Production Engineering</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/as.adib.338?mibextid=ZbWKwL" class="contact-link">Facebook</a>
-                    <a href="mailto:saffatsinger@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">MD Ashraful Alam Ornab</h3>
-                <p class="contact-info">Roll: 12404076</p>
-                <p class="contact-info">Institute: Mugda Medical College</p>
-                <p class="contact-info">Subject: MBBS</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/15F3QEEcia/" class="contact-link">Facebook</a>
-                    <a href="mailto:mdashrafulalamornab@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Siddhartho Saha</h3>
-                <p class="contact-info">Roll: 12404074</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: Biomedical Engineering</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/19kmMmpsaJ/?mibextid=qi2Omg" class="contact-link">Facebook</a>
-                    <a href="mailto:mr.siddisaha@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md. Moontasir Anan</h3>
-                <p class="contact-info">Roll: 12404022</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: EEE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/1HY5Y6cjHV/" class="contact-link">Facebook</a>
-                    <a href="mailto:md.moontasiranan4022@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Fahomid Lafim Pritom</h3>
-                <p class="contact-info">Roll: 12404068</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: Naval Arch & Marine Engineering</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/1F85XyMLkV/" class="contact-link">Facebook</a>
-                    <a href="mailto:fahomidlafimpritom@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Juboraj Malakar</h3>
-                <p class="contact-info">Roll: 12404091</p>
-                <p class="contact-info">Institute: SUST</p>
-                <p class="contact-info">Subject: CSE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/1XUeFjszax" class="contact-link">Facebook</a>
-                    <a href="mailto:juborajmalakar307@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md. Fahim Hassan</h3>
-                <p class="contact-info">Roll: 12404079</p>
-                <p class="contact-info">Institute: BRAC University</p>
-                <p class="contact-info">Subject: CSE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/arcade.lion.7" class="contact-link">Facebook</a>
-                    <a href="mailto:mdfahimhassanbd7@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md. Ashraf Hossain Chowdhury</h3>
-                <p class="contact-info">Roll: 12404029</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: CSE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/1DoQcbdwfC/?mibextid=qi2Omg" class="contact-link">Facebook</a>
-                    <a href="mailto:ashrafhc25@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md. Ismail Hossain Mafid</h3>
-                <p class="contact-info">Roll: 12404028</p>
-                <p class="contact-info">Institute: Faridpur Medical College</p>
-                <p class="contact-info">Subject: MBBS</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/proﬁle.php?id=100071896360613" class="contact-link">Facebook</a>
-                    <a href="mailto:mafid2652@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md. Al Katib Laskar</h3>
-                <p class="contact-info">Roll: 12404058</p>
-                <p class="contact-info">Institute: KUET</p>
-                <p class="contact-info">Subject: EEE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/16Zo8DoaWn/?mibextid=wwXIfr" class="contact-link">Facebook</a>
-                    <a href="mailto:alkatiblaskar69@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md. Mahim Muntasir</h3>
-                <p class="contact-info">Roll: 12404122</p>
-                <p class="contact-info">Institute: Dinajpur Medical College</p>
-                <p class="contact-info">Subject: MBBS</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/1Ya3y8paoX/" class="contact-link">Facebook</a>
-                    <a href="mailto:mahimmuntasir2005@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md Salman Uddin Pathan</h3>
-                <p class="contact-info">Roll: 12404097</p>
-                <p class="contact-info">Institute: BUTEX</p>
-                <p class="contact-info">Subject: Textile Engineering Management</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/md.salmanuddin.pathan" class="contact-link">Facebook</a>
-                    <a href="mailto:salmanpathanbaizid@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Abdul Haq Musiar</h3>
-                <p class="contact-info">Roll: 12404103</p>
-                <p class="contact-info">Institute: SUST</p>
-                <p class="contact-info">Subject: EEE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/abdul.haq.musiar" class="contact-link">Facebook</a>
-                    <a href="mailto:ahmusiar@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Lokonath Basak Bijoy</h3>
-                <p class="contact-info">Roll: 12404020</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: CSE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/168hzVDscx/" class="contact-link">Facebook</a>
-                    <a href="mailto:loknathbasak13@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Khandoker Rayan Nil Dhrubo</h3>
-                <p class="contact-info">Roll: 12404002</p>
-                <p class="contact-info">Institute: Bangladesh Medical College</p>
-                <p class="contact-info">Subject: MBBS</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/15gbuzkbuZ/" class="contact-link">Facebook</a>
-                    <a href="mailto:nildhrubo04@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Nafis Fuad</h3>
-                <p class="contact-info">Roll: 12404061</p>
-                <p class="contact-info">Institute: MIST</p>
-                <p class="contact-info">Subject: CSE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/naﬁs.fp12?mibextid=wwXIfr&mibextid=wwXI" class="contact-link">Facebook</a>
-                    <a href="mailto:nafisfuad8010@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Kazi Ahmed Umair</h3>
-                <p class="contact-info">Roll: 12404041</p>
-                <p class="contact-info">Institute: Shaheed Suhrawardy Medical College</p>
-                <p class="contact-info">Subject: MBBS</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/18sNBQi5oM/" class="contact-link">Facebook</a>
-                    <a href="mailto:kaziumair108@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Mohammad Rydwan Islam</h3>
-                <p class="contact-info">Roll: 12404027</p>
-                <p class="contact-info">Institute: Chittagong Medical College</p>
-                <p class="contact-info">Subject: MBBS</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/16GhtaV6wH/" class="contact-link">Facebook</a>
-                    <a href="mailto:rydwanislam10p15@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Prianto Paul</h3>
-                <p class="contact-info">Roll: 12404007</p>
-                <p class="contact-info">Institute: DU</p>
-                <p class="contact-info">Subject: Chemistry</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/1BfEVSU7J2/" class="contact-link">Facebook</a>
-                    <a href="mailto:priantopaul@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Arnob Debnath</h3>
-                <p class="contact-info">Roll: 12404073</p>
-                <p class="contact-info">Institute: RUET</p>
-                <p class="contact-info">Subject: Architecture</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/18cxHDgaMn/" class="contact-link">Facebook</a>
-                    <a href="mailto:dnarnob.01@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md Arif Abdullah Ratul</h3>
-                <p class="contact-info">Roll: 12404070</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: Mechanical Engineering</p>
-                <div class="contact-links">
-                    <a href="https://m.me/arif.abdullah.5283166" class="contact-link">Facebook</a>
-                    <a href="mailto:arifabdullah99666@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Arya Dip Mondal</h3>
-                <p class="contact-info">Roll: 12404116</p>
-                <p class="contact-info">Institute: BUET</p>
-                <p class="contact-info">Subject: Mechanical Engineering</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/1E5SpLteqx/" class="contact-link">Facebook</a>
-                    <a href="mailto:aryadip04116@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md Tanvir Islam</h3>
-                <p class="contact-info">Roll: 12404124</p>
-                <p class="contact-info">Institute: Rajshahi Medical College</p>
-                <p class="contact-info">Subject: MBBS</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/1EoE3q6bDw/" class="contact-link">Facebook</a>
-                    <a href="mailto:tanvir12404124@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Khalid Bin Mozib Shuvo</h3>
-                <p class="contact-info">Roll: 12404130</p>
-                <p class="contact-info">Institute: Nilphamari Medical College</p>
-                <p class="contact-info">Subject: MBBS</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/walid.shuvo.54/" class="contact-link">Facebook</a>
-                    <a href="mailto:walidshuvo26@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md. Shohanul Hoque</h3>
-                <p class="contact-info">Roll: 12404035</p>
-                <p class="contact-info">Institute: RUET</p>
-                <p class="contact-info">Subject: EEE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/shohanul.shohan.77" class="contact-link">Facebook</a>
-                    <a href="mailto:sohanuls1@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Aritro Ghosh</h3>
-                <p class="contact-info">Roll: 12404126</p>
-                <p class="contact-info">Institute: SUST</p>
-                <p class="contact-info">Subject: Software Engineering</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/arko.ghosh.3511041" class="contact-link">Facebook</a>
-                    <a href="mailto:aritroghosh200828@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">MD Ittehad Alam Prohor</h3>
-                <p class="contact-info">Roll: 12404113</p>
-                <p class="contact-info">Institute: Nugda Medical College</p>
-                <p class="contact-info">Subject: MBBS</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/16JnBEbUS2" class="contact-link">Facebook</a>
-                    <a href="mailto:ittehadprohor@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Navid- Ul- Hasan</h3>
-                <p class="contact-info">Roll: 12404106</p>
-                <p class="contact-info">Institute: IUT</p>
-                <p class="contact-info">Subject: CSE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/navidul.hasan.75470" class="contact-link">Facebook</a>
-                    <a href="mailto:navidulhasan11@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">MD. Tahmidur Rahman Anik</h3>
-                <p class="contact-info">Roll: 12404067</p>
-                <p class="contact-info">Institute: MIST</p>
-                <p class="contact-info">Subject: Nuclear Science & Engineering</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/12LwdAmsQphttpsv" class="contact-link">Facebook</a>
-                    <a href="mailto:tahmidurrahman224@gmail.com" class="contact-link">Email</a>
-                </div>
-            </div>
-            <div class="contact-card">
-                <h3 class="contact-name">Md. Umair Hasan</h3>
-                <p class="contact-info">Roll: 12404096</p>
-                <p class="contact-info">Institute: RUET</p>
-                <p class="contact-info">Subject: EEE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/share/19CqAcuATw" class="contact-link">Facebook</a>
-                    <a href="mailto:umairlr82@gmail.com" class="contact-link">Email</a>
-                </div>
-             </div>
-             <div class="contact-card">
-                <h3 class="contact-name">Md Adnan Talukdar</h3>
-                <p class="contact-info">Roll: 12404092</p>
-                <p class="contact-info">Institute: CUET</p>
-                <p class="contact-info">Subject: CSE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/adnantalukdar15" class="contact-link">Facebook</a>
-                    <a href="mailto:adnancollegiate@email.com" class="contact-link">Email</a>
-                </div>
-             </div>
 
-             <div class="contact-card">
-                <h3 class="contact-name">Md. Mahbobul Hasan Sagor</h3>
-                <p class="contact-info">Roll: 12404120 </p>
-                <p class="contact-info">Institute: SUST</p>
-                <p class="contact-info">Subject: CSE</p>
-                <div class="contact-links">
-                    <a href="https://www.facebook.com/mdmahbobulhasansagor" class="contact-link">Facebook</a>
-                    <a href="mailto:mahbobulhasansagor@gmail.com" class="contact-link">Email</a>
+            .contact-link:hover {
+                text-decoration: underline;
+            }
+
+            /* Responsive design */
+            @media (max-width: 768px) {
+                .navbar {
+                    padding: 0.8rem 1rem;
+                }
+
+                .logo {
+                    font-size: 1.3rem;
+                }
+
+                .nav-btn {
+                    padding: 0.4rem 1rem;
+                    font-size: 0.9rem;
+                }
+
+                .contacts-grid {
+                    grid-template-columns: repeat(
+                        auto-fill,
+                        minmax(200px, 1fr)
+                    );
+                    gap: 1.5rem;
+                }
+
+                .contact-photo {
+                    width: 100px;
+                    height: 100px;
+                }
+
+                .page-title {
+                    font-size: 1.5rem;
+                    margin-bottom: 1.5rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar">
+            <a href="/index.html" class="logo">Group-IV 4ever</a>
+            <div class="nav-buttons">
+                <a href="/index.html"
+                    ><button class="nav-btn"><b>Home</b></button></a
+                >
+                <a href="/events.html"
+                    ><button class="nav-btn"><b>Events</b></button></a
+                >
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="contacts-grid">
+                <div class="contact-card">
+                    <h3 class="contact-name">Khondoker Muktadirul Islam</h3>
+                    <p class="contact-info">Roll: 12404046</p>
+                    <p class="contact-info">Institute: ISRT, DU</p>
+                    <p class="contact-info">
+                        Subject: Applied Statistics & Data Science
+                    </p>
+                    <p class="contact-info">
+                        I maintain this website. For any website related queries
+                        or information mismatch, please contact me.
+                    </p>
+                    <div class="contact-links">
+                        <a href="#" class="contact-link">Facebook</a>
+                        <a
+                            href="mailto:somiomuktadir@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
                 </div>
-             </div>
-            
-            
-        </div>
-    </main>
-</body>
+                <div class="contact-card">
+                    <h3 class="contact-name">Nahian Monir</h3>
+                    <p class="contact-info">Roll: 12404071</p>
+                    <p class="contact-info">
+                        Institute: Faridpur Medical College
+                    </p>
+                    <p class="contact-info">Subject: MBBS</p>
+                    <p class="contact-info">
+                        I collect information about our alumni. For any
+                        information related queries, please contact me.
+                    </p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/monirnahian10"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:nahianmahi849@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Tafsirul Mahbub Sowad</h3>
+                    <p class="contact-info">Roll: 12404081</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">Subject: Civil Engineering</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/1ABmhzStKj/?mibextid=wwXIfr"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:tafsirulsowad695@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Abrar Fahim</h3>
+                    <p class="contact-info">Roll: 12404039</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">
+                        Subject: Industrial & Production Engineering
+                    </p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/1Y9NbU41fu/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:abrarfahim1971@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Ahammad Nabil</h3>
+                    <p class="contact-info">Roll: 12404075</p>
+                    <p class="contact-info">Institute: BUTEX</p>
+                    <p class="contact-info">Subject: Yarn Engineering</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/15uXjVmQZL/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:ahmedquraisilusael@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Mahibur Rahman Fahim</h3>
+                    <p class="contact-info">Roll: 12404043</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/16LpKZiM1e/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:mahibur28@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">MD Nafiz Ahmed</h3>
+                    <p class="contact-info">Roll: 12404121</p>
+                    <p class="contact-info">Institute: RUET</p>
+                    <p class="contact-info">Subject: Mechanical Engineering</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://web.facebook.com/proﬁle.php?id=100090353485932"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:ahmednafiz964@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Muqset Hossain Mahin</h3>
+                    <p class="contact-info">Roll: 12404110</p>
+                    <p class="contact-info">Institute: CUET</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/192bFh62aJ/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:muqset1202@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Fairuzur Pretom</h3>
+                    <p class="contact-info">Roll: 12404066</p>
+                    <p class="contact-info">Institute: RUET</p>
+                    <p class="contact-info">Subject: Architecture</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/goandﬁndme.come"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:fairuzurrahmanpretom@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Maniruzzaman Mridul</h3>
+                    <p class="contact-info">Roll: 12404078</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a href="#" class="contact-link">Facebook</a>
+                        <a
+                            href="mailto:mdmaniruzzamanmridul@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Radwan Islam</h3>
+                    <p class="contact-info">Roll: 12404069</p>
+                    <p class="contact-info">Institute: BUTEX</p>
+                    <p class="contact-info">Subject: Yarn Engineering</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/md.rad1.islam?mibextid=ZbWKwL"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:mohammad.rad1.islam@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Ruhul Amin Sifat</h3>
+                    <p class="contact-info">Roll: 12404008</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">
+                        Subject: Materials & Metallurgical Engineering
+                    </p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/proﬁle.php?id=100089085095296"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:paulsifat10032005@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Al Saffat Adib</h3>
+                    <p class="contact-info">Roll: 12404012</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">
+                        Subject: Industrial & Production Engineering
+                    </p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/as.adib.338?mibextid=ZbWKwL"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:saffatsinger@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">MD Ashraful Alam Ornab</h3>
+                    <p class="contact-info">Roll: 12404076</p>
+                    <p class="contact-info">Institute: Mugda Medical College</p>
+                    <p class="contact-info">Subject: MBBS</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/15F3QEEcia/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:mdashrafulalamornab@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Siddhartho Saha</h3>
+                    <p class="contact-info">Roll: 12404074</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">Subject: Biomedical Engineering</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/19kmMmpsaJ/?mibextid=qi2Omg"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:mr.siddisaha@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Moontasir Anan</h3>
+                    <p class="contact-info">Roll: 12404022</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">Subject: EEE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/1HY5Y6cjHV/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:md.moontasiranan4022@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Fahomid Lafim Pritom</h3>
+                    <p class="contact-info">Roll: 12404068</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">
+                        Subject: Naval Arch & Marine Engineering
+                    </p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/1F85XyMLkV/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:fahomidlafimpritom@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Juboraj Malakar</h3>
+                    <p class="contact-info">Roll: 12404091</p>
+                    <p class="contact-info">Institute: SUST</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/1XUeFjszax"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:juborajmalakar307@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Fahim Hassan</h3>
+                    <p class="contact-info">Roll: 12404079</p>
+                    <p class="contact-info">Institute: BRAC University</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/arcade.lion.7"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:mdfahimhassanbd7@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Ashraf Hossain Chowdhury</h3>
+                    <p class="contact-info">Roll: 12404029</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/1DoQcbdwfC/?mibextid=qi2Omg"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:ashrafhc25@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Ismail Hossain Mafid</h3>
+                    <p class="contact-info">Roll: 12404028</p>
+                    <p class="contact-info">
+                        Institute: Faridpur Medical College
+                    </p>
+                    <p class="contact-info">Subject: MBBS</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/proﬁle.php?id=100071896360613"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:mafid2652@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Al Katib Laskar</h3>
+                    <p class="contact-info">Roll: 12404058</p>
+                    <p class="contact-info">Institute: KUET</p>
+                    <p class="contact-info">Subject: EEE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/16Zo8DoaWn/?mibextid=wwXIfr"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:alkatiblaskar69@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Mahim Muntasir</h3>
+                    <p class="contact-info">Roll: 12404122</p>
+                    <p class="contact-info">
+                        Institute: Dinajpur Medical College
+                    </p>
+                    <p class="contact-info">Subject: MBBS</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/1Ya3y8paoX/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:mahimmuntasir2005@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md Salman Uddin Pathan</h3>
+                    <p class="contact-info">Roll: 12404097</p>
+                    <p class="contact-info">Institute: BUTEX</p>
+                    <p class="contact-info">
+                        Subject: Textile Engineering Management
+                    </p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/md.salmanuddin.pathan"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:salmanpathanbaizid@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Abdul Haq Musiar</h3>
+                    <p class="contact-info">Roll: 12404103</p>
+                    <p class="contact-info">Institute: SUST</p>
+                    <p class="contact-info">Subject: EEE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/abdul.haq.musiar"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a href="mailto:ahmusiar@gmail.com" class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Lokonath Basak Bijoy</h3>
+                    <p class="contact-info">Roll: 12404020</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/168hzVDscx/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:loknathbasak13@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Khandoker Rayan Nil Dhrubo</h3>
+                    <p class="contact-info">Roll: 12404002</p>
+                    <p class="contact-info">
+                        Institute: Bangladesh Medical College
+                    </p>
+                    <p class="contact-info">Subject: MBBS</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/15gbuzkbuZ/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:nildhrubo04@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Nafis Fuad</h3>
+                    <p class="contact-info">Roll: 12404061</p>
+                    <p class="contact-info">Institute: MIST</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/naﬁs.fp12?mibextid=wwXIfr&mibextid=wwXI"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:nafisfuad8010@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Kazi Ahmed Umair</h3>
+                    <p class="contact-info">Roll: 12404041</p>
+                    <p class="contact-info">
+                        Institute: Shaheed Suhrawardy Medical College
+                    </p>
+                    <p class="contact-info">Subject: MBBS</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/18sNBQi5oM/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:kaziumair108@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Mohammad Rydwan Islam</h3>
+                    <p class="contact-info">Roll: 12404027</p>
+                    <p class="contact-info">
+                        Institute: Chittagong Medical College
+                    </p>
+                    <p class="contact-info">Subject: MBBS</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/16GhtaV6wH/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:rydwanislam10p15@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Prianto Paul</h3>
+                    <p class="contact-info">Roll: 12404007</p>
+                    <p class="contact-info">Institute: DU</p>
+                    <p class="contact-info">Subject: Chemistry</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/1BfEVSU7J2/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:priantopaul@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Arnob Debnath</h3>
+                    <p class="contact-info">Roll: 12404073</p>
+                    <p class="contact-info">Institute: RUET</p>
+                    <p class="contact-info">Subject: Architecture</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/18cxHDgaMn/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:dnarnob.01@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md Arif Abdullah Ratul</h3>
+                    <p class="contact-info">Roll: 12404070</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">Subject: Mechanical Engineering</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://m.me/arif.abdullah.5283166"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:arifabdullah99666@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Arya Dip Mondal</h3>
+                    <p class="contact-info">Roll: 12404116</p>
+                    <p class="contact-info">Institute: BUET</p>
+                    <p class="contact-info">Subject: Mechanical Engineering</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/1E5SpLteqx/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:aryadip04116@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md Tanvir Islam</h3>
+                    <p class="contact-info">Roll: 12404124</p>
+                    <p class="contact-info">
+                        Institute: Rajshahi Medical College
+                    </p>
+                    <p class="contact-info">Subject: MBBS</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/1EoE3q6bDw/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:tanvir12404124@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Khalid Bin Mozib Shuvo</h3>
+                    <p class="contact-info">Roll: 12404130</p>
+                    <p class="contact-info">
+                        Institute: Nilphamari Medical College
+                    </p>
+                    <p class="contact-info">Subject: MBBS</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/walid.shuvo.54/"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:walidshuvo26@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Shohanul Hoque</h3>
+                    <p class="contact-info">Roll: 12404035</p>
+                    <p class="contact-info">Institute: RUET</p>
+                    <p class="contact-info">Subject: EEE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/shohanul.shohan.77"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:sohanuls1@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Aritro Ghosh</h3>
+                    <p class="contact-info">Roll: 12404126</p>
+                    <p class="contact-info">Institute: SUST</p>
+                    <p class="contact-info">Subject: Software Engineering</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/arko.ghosh.3511041"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:aritroghosh200828@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">MD Ittehad Alam Prohor</h3>
+                    <p class="contact-info">Roll: 12404113</p>
+                    <p class="contact-info">Institute: Nugda Medical College</p>
+                    <p class="contact-info">Subject: MBBS</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/16JnBEbUS2"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:ittehadprohor@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Navid- Ul- Hasan</h3>
+                    <p class="contact-info">Roll: 12404106</p>
+                    <p class="contact-info">Institute: IUT</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/navidul.hasan.75470"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:navidulhasan11@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">MD. Tahmidur Rahman Anik</h3>
+                    <p class="contact-info">Roll: 12404067</p>
+                    <p class="contact-info">Institute: MIST</p>
+                    <p class="contact-info">
+                        Subject: Nuclear Science & Engineering
+                    </p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/12LwdAmsQphttpsv"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:tahmidurrahman224@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Umair Hasan</h3>
+                    <p class="contact-info">Roll: 12404096</p>
+                    <p class="contact-info">Institute: RUET</p>
+                    <p class="contact-info">Subject: EEE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/share/19CqAcuATw"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:umairlr82@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md Adnan Talukdar</h3>
+                    <p class="contact-info">Roll: 12404092</p>
+                    <p class="contact-info">Institute: CUET</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/adnantalukdar15"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:adnancollegiate@email.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Mahbobul Hasan Sagor</h3>
+                    <p class="contact-info">Roll: 12404120</p>
+                    <p class="contact-info">Institute: SUST</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/mdmahbobulhasansagor"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:mahbobulhasansagor@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Mahbobul Hasan Sagor</h3>
+                    <p class="contact-info">Roll: 12404120</p>
+                    <p class="contact-info">Institute: SUST</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/mdmahbobulhasansagor"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:mahbobulhasansagor@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Mahbobul Hasan Sagor</h3>
+                    <p class="contact-info">Roll: 12404120</p>
+                    <p class="contact-info">Institute: SUST</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/mdmahbobulhasansagor"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:mahbobulhasansagor@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <h3 class="contact-name">Md. Mahbobul Hasan Sagor</h3>
+                    <p class="contact-info">Roll: 12404120</p>
+                    <p class="contact-info">Institute: SUST</p>
+                    <p class="contact-info">Subject: CSE</p>
+                    <div class="contact-links">
+                        <a
+                            href="https://www.facebook.com/mdmahbobulhasansagor"
+                            class="contact-link"
+                            >Facebook</a
+                        >
+                        <a
+                            href="mailto:mahbobulhasansagor@gmail.com"
+                            class="contact-link"
+                            >Email</a
+                        >
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
 </html>
